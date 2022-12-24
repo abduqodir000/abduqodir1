@@ -4,7 +4,6 @@ from django.db.models import Model, ForeignKey, CharField, ImageField, UUIDField
 
 # Create your models here.
 class Region(Model):
-    id = UUIDField(primery_key=True, unique=True, default=uuid.uuid4(), editable=False)
     name = CharField(max_length=55)
 
     class Meta:
@@ -13,16 +12,15 @@ class Region(Model):
 
 
 class Category(Model):
-    id = UUIDField(primary_key=True, unique=True, default=uuid.uuid4(), editable=False)
+    id = UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
     name = CharField(max_length=55)
 
     class Meta:
-        vebose_name = "Bo'lim"
         verbose_name_plural = "Bo'limlar"
 
 
 class Tag(Model):
-    id = UUIDField(primary_key=True, unique=True, default=uuid.uuid4(), editable=False)
+    id = UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
     name = CharField(max_length=125)
 
     class Meta:
@@ -31,10 +29,37 @@ class Tag(Model):
 
 
 class Blog(Model):
-    id = UUIDField(primary_key=True, unique=True, default=uuid.uuid4(), editable=False)
+    id = UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
     title = CharField(max_length=55)
     text = TextField()
     image = ImageField(upload_to='blogs/%Y/%m%d')
     category = ForeignKey("apps.Region", CASCADE, null=True, blank=True)
     region = ForeignKey('apps.Region', CASCADE, null=True, blank=True)
     tag = ManyToManyField('apps.Tag')
+
+
+'''
+
+server {
+    listen       7777;
+    server_name  109.74.203.254;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+
+    location /static/ {
+        root /var/www/abduqodir;
+    }
+
+    location /media/ {
+        root /var/www/abduqodir;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/var/www/abduqodir/abduqodir.sock;
+    }
+
+}
+
+
+'''
